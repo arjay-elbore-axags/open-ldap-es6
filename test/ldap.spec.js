@@ -7,7 +7,7 @@ chai.should();
 describe('Ldap', () => {
   
    /// This serve as behavior (authenticate)
-   describe('authenticate user account', () => {
+   describe('authenticate digital account', () => {
       let _ldap;
       
       beforeEach(() => {
@@ -38,6 +38,7 @@ describe('Ldap', () => {
           _actual.should.equal('invalid user.');          
       });
    });
+   
    
    describe('add user account', () => {
       let _ldap;

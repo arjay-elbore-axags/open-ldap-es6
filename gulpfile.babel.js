@@ -1,11 +1,14 @@
-const gulp = require('gulp');
-const sourcemaps = require('gulp-sourcemaps');
-const babel = require('gulp-babel');
-const concat = require('gulp-concat');
+require('babel/register');
+
+var gulp = require('gulp');
+var sourcemaps = require('gulp-sourcemaps');
+var babel = require('gulp-babel');
+var concat = require('gulp-concat');
 
 var mocha = require('gulp-mocha');
 var util = require('gulp-util');
-var babel_reg = require('babel/register');
+
+require('babel/register');
  
 gulp.task('default', function() {
 	return gulp.src('src/**/*.js')
@@ -22,7 +25,9 @@ gulp.task('test', function () {
     return gulp.src(['test/**/*.js'], { read: false })
         .pipe(mocha({ 
             reporter: 'spec',
-            compilers: { js: babel_reg } 
+            compilers: [
+                'js:babel-core/register',
+            ]
         }))
         .on('error', util.log);
 });
