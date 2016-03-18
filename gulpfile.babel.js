@@ -31,3 +31,15 @@ gulp.task('test', function () {
         }))
         .on('error', util.log);
 });
+
+
+gulp.task('e2e', function () {
+    return gulp.src(['e2e/**/*.js'], { read: false })
+        .pipe(mocha({ 
+            reporter: 'spec',
+            compilers: [
+                'js:babel-core/register',
+            ]
+        }))
+        .on('error', util.log);
+});
