@@ -1,0 +1,9 @@
+{
+  "name": "account",
+  "plural": "accounts",
+  "resourceName": "Account",
+
+  "middleware": {
+    "enable": ["verifyEmail", "addAccount"]
+  }
+}

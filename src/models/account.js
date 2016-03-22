@@ -1,15 +1,12 @@
 'use strict';
 
 import Ldap from './ldap'
-import { AccountRoutes } from '../utils/route' 
-import { hooker } from 'mw-hooker'
 
 class Account {
-    constructor(account){
-      
+    constructor(){
     }
     
-    VerifyEmail(emailAddress, callback){
+    verifyEmail(emailAddress, callback){
          let error = '',
             success = ''
         
