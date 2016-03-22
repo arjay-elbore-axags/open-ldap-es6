@@ -7,7 +7,7 @@ var ldap_client = Symbol('ldap_client');
 class Ldap {
     
 	constructor(){
-        this[ldap_client] = ldapjs.createClient({ url: process.env.LDAP_SERVER_URL });
+        //this[ldap_client] = ldapjs.createClient({ url: process.env.LDAP_SERVER_URL });
     }
     
     /**
