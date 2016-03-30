@@ -84,12 +84,10 @@ describe('Account', () => {
         }); 
     });
     
-    describe('#sendVerificationEmail', () => {
-        
+    describe('#sendVerificationEmail', () => {        
     });
     
-    describe('#generateEmailUrl', () => {
-        
+    describe('#generateEmailUrl', () => {       
     });
     
     describe('#authenticate', () => {

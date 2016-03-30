@@ -5,20 +5,13 @@ var sourcemaps = require('gulp-sourcemaps');
 var babel = require('gulp-babel');
 var concat = require('gulp-concat');
 
-var fs = require('fs');
-var path = require('path');
-
 var mocha = require('gulp-mocha');
 var util = require('gulp-util');
 var del = require('del');
 
-console.log(path.join);
-
-const babelrc = JSON.parse(fs.readFileSync(path.join(__dirname, '.babelrc'), 'utf-8'));
-
 var test_path = {
     sources: ['test/units/**/*.js'],
-    src: ['test/units/account-spec.js']
+    src: ['test/ldap-spec.js']
 };
 
 var build_path = [
@@ -68,7 +61,7 @@ gulp.task('build', ['clean'], function() {
 });
 
 gulp.task('test', function () {
-    return gulp.src(test_path.sources, { read: false })
+    return gulp.src(test_path.src, { read: false })
         .pipe(mocha({ 
             reporter: 'spec',
             compilers: [

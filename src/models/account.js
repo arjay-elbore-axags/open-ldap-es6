@@ -1,58 +1,91 @@
 'use strict';
 
-import AccoutRoutes from './account.route'
-import DigitalAccount from './account'
-import { hooker } from 'mw-hooker'
+import Ldap from './ldap'
+import path from 'path'
 
-module.exports = (Account) => {         
-    Account
-        .on('attached', () => {
-            new AccoutRoutes().register(Account);
-          
-            /**
-             *  @emailAddress => emailAddress
-             *  return status 200 or 404
-             */
-            Account.verifyEmail = (emailAddress, next) => {
-                Account
-                    .findOne({ email: emailAddress }, 
-                        (error, account) => {
-                            if (!error){
-                               next(null, 200); 
-                            } else {
-                                next(null, 404);
+let ldap, _accountModel;
+
+class Account {
+    
+    /// TODO: import or inject accountModel
+    ///     so that it will not need to inject thru constructor;
+    constructor(accountModel){
+        _accountModel = accountModel;
+        ldap = new Ldap();   
+    }
+   
+    addDigitalAccount(emailAddress, password, callBack){         
+        _accountModel.findOne({ email: emailAddress }, 
+            (error, account) => {
+                if (account){
+                    /// 
+                } else {
+                    /// email is not exist in the database
+                    _accountModel.create({ email: emailAddress }, 
+                        (error, newAccout) => {
+                            if (!error){                                
+                                ldap.addUser(newAccout.id, password, (err, res) => {
+                                    callBack(error, newAccout); 
+                                });                                       
                             }
-                        });      
-            };
-            
-            /**
-             *  @emailAddress => 
-             *  @callback => 
-             *  return => (void)
-             */
-            Account.sendVerificationEmail = (emailAddress) => {
-                account.sendVerificationEmail(emailAddress,
-                     (err, result) => {
-                        if (!err){
-                            
-                        } else {
-                            
-                        }                    
+                        });
+                }
+            }); 
+    }
+   
+    /** This will check if email is exist in the DB
+     *  @emailAddress => emailAddress
+     *  @callBack => accepts error & account model
+    */
+    verifyEmail(emailAddress, callBack){ 
+        _accountModel
+            .findOne({ email: emailAddress }, 
+                (error, account) => {
+                    if (!error && account){
+                        callBack(error, account);
+                    }
+                });                     
+    }
+    
+    /**
+     *  @emailAddress => emailAddress
+     *  @callBack => accepts error & account model
+     */
+    authenticate(emailAddress, password, callBack){
+        _accountModel
+            .findOne({ email: emailAddress }, (error, account) => {
+                if (!error && account){
+                    ldap.authenticate(emailAddress, password,  (error, response) => {
+                        callBack(error, response);  
                     });
-            };
-            
-            /**
-             * @emailAddress
-             * @password
-             */
-            Account.authenticate = (emailAddress, password) => {
-                account.authenticate(emailAddress, password, 
-                    (err, result) => {
-                        if (!err){
-                            next(null, 200);
-                        }
-                    });
-            };
-            
-        });     
-};
+                }
+            });           
+    }
+    
+    /**
+     *  @emailAddress => emailAddress
+     *  @callback => callback to override return
+     *  return status 200 or 404
+    */    
+    sendVerificationEmail(emailAddress, callback){
+        let error = '',
+        success = ''
+    
+        callback(error, success);         
+    }
+    
+    /**
+     *  @emailAddress => emailAddress
+     *  @callback => callback to override return
+     *  return status 200 or 404
+    */      
+    generateEmailUrl(emailAddress, callBack){
+        let error = '',
+        success = ''
+    
+        callback(error, success); 
+    }
+}
+
+module.exports = Account
+

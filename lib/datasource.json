@@ -1,8 +1,0 @@
-{
-  "accounts": {
-    "connector": "mongodb",
-    "debug": "true",
-    "host": "localhost",
-    "database": "accounts"
-  }
-}
