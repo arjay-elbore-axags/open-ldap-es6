@@ -1,0 +1,7 @@
+{
+  "Account": {
+    "dataSource": "accounts",
+    "base": "Model",
+    "public": true
+  }
+}

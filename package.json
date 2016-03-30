@@ -2,13 +2,19 @@
   "name": "open-ldap-es6",
   "version": "0.0.1",
   "description": "An sample module that shows how to use Mocha, Chai and Istanbul to test and generate coverage for ES6 code.",
-  "main": "index.js",
+  "main": "./lib",
   "scripts": {
+    "start": "MIDDLEWARE=../mobile-middleware node ../mobile-middleware/lib/server/server.js --entity .",
     "test": "mocha --compilers js:babel/register",
+    "e2e": "NODE_PATH=. zyva --units=e2e",
     "coverage": "istanbul cover _mocha -- --compilers js:babel/register",
     "coverage-es6": "babel-node ./node_modules/.bin/isparta cover _mocha",
     "lint": "jshint .",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "build": "gulp build",
+    "start-logs": "LOG_LEVEL=debug NODE_DEBUG=net DEBUG=* npm start --",
+    "debug": "npm start --debug --",
+    "zyva": "zyva"
   },
   "pre-commit": [
     ""
@@ -26,6 +32,9 @@
   "dependencies": {
     "loopback": "^2.8.0",
     "mw-hooker": "^1.0.0"
+  },
+  "engines": {
+    "middleware": ">= 2.0.0-rc.1"
   },
   "devDependencies": {
     "babel": "^5.8.19",
@@ -52,6 +61,9 @@
     "mw-logger": "^2.0.4",
     "precommit-hook": "^3.0.0",
     "request": "^2.69.0",
-    "supertest": "^1.1.0"
+    "sinon": "^1.17.3",
+    "supertest": "^1.1.0",
+    "zyva": "^6.0.0",
+    "del": "^2.2.0"
   }
 }

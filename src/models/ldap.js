@@ -1,13 +1,13 @@
 'use strict'
 
-import { ldapjs } from 'ldapjs'
+import ldapjs from 'ldapjs'
 
-var ldap_client = Symbol('ldap_client');
+let ldap_client;
 
 class Ldap {
     
 	constructor(){
-        //this[ldap_client] = ldapjs.createClient({ url: process.env.LDAP_SERVER_URL });
+        ldap_client = ldapjs.createClient({ url: process.env.LDAP_SERVER_URL });   
     }
     
     /**
@@ -15,30 +15,45 @@ class Ldap {
     * @password => password
     * @callback => return error or success 
     */    
-    addUser(id, password, callback){           
-        let error = '',
-            success = ''
-        
-        callback(error, success);
+    addUser(id, password, callBack){                               
+        let adminDN = `cn=${process.env.LDAP_ADMIN_USER},${process.env.LDAP_DC}`;  
+                                          
+        ldap_client
+            .bind(adminDN, process.env.LDAP_ADMIN_PASSWORD, (err, res) => {
+                if (!err) {
+                    let dn = `cn=${id},ou=Users,${process.env.LDAP_DC}`; 
+                    let newUser = {
+                        cn: id,
+                        userPassword: password,
+                        objectClass: "person"
+                    }
+                    
+                    ldap_client
+                        .add(dn, newUser, (err, response) => {
+                            callBack(err, response);
+                        });
+                } 
+            });          
     }
 
     /**
-     * @id => userId
-     * @password => password
-     * @callback => return error or success 
+     * @id { String } => userId
+     * @password { String } => password
+     * @callback { Function } => return error or success 
      */
-    authenticate(id, password, callback){        
-        let error = '',
-            success = ''
-        
-        callback(error, success);    
+    authenticate(id, password, callBack){        
+        let dn = `cn=${id},ou=Users,${process.env.LDAP_DC}`;     
+                  
+        ldap_client
+            .bind(dn, password, (err, res) => {
+                 callBack(err, res);
+            });           
     } 
     
     
-    deleteUser(id){
-        var client = this[size];
-         
-        client.del(`cn=${process.env.LDAP_ADMIN_USER},ou=Users,${process.env.LDAP_DC}`, 
+    deleteUser(id){         
+        ldap_client
+            .del(`cn=${process.env.LDAP_ADMIN_USER},ou=Users,${process.env.LDAP_DC}`, 
             (err, success) => {
                 /// Log here the error or msg
             });      

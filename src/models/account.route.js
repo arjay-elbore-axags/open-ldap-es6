@@ -8,22 +8,12 @@ class Setup {
     
     register(model){
         Register(model, {
-            "verify": {
-                "description": "Authenticate a user",
+            "verifyEmail": {
+                "description": "Verify a user",
                 "accepts": [
                     {
-                        "description": "Type of identifier for user, one of 'mobile', 'email'",
-                        "arg": "identifier_type",
-                        "type": "string"
-                    },
-                    {
-                        "description": "Value of identifier, e.g. an email address or a mobile phone number",
-                        "arg": "identifier",
-                        "type": "string"
-                    },
-                    {
-                        "description": "Password for the user",
-                        "arg": "password",
+                        "description": "emailAddress to be verify.",
+                        "arg": "emailAddress",
                         "type": "string"
                     }
                 ],
